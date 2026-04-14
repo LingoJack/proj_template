@@ -1,7 +1,8 @@
 SHELL := /bin/bash
 
 .PHONY: current_dir status push pull \
-        init-frontend check-frontend dev-frontend
+        init-frontend check-frontend dev-frontend \
+        wire jen run-backend test-backend lint-backend tidy-backend
 
 current_dir: ## 显示当前目录信息
 	@echo "当前目录: $$(pwd)"
@@ -68,5 +69,26 @@ init-backend: current_dir ## 初始化后端 Go+Gin (用法: make init-backend)
 	@echo "创建 go 后台..."
 	@cd backend && go mod init main
 	@echo "后端初始化完成: backend/"
+
+# ============================================
+# 后端
+# ============================================
+wire: ## 重新生成 Wire 依赖注入代码
+	@cd backend && wire ./cmd/server/
+
+jen: ## 用 jen 重新生成 DAO 代码（需先编辑 backend/.model_infrax/schema.sql）
+	@cd backend && jen
+
+run-backend: ## 启动后端服务
+	@cd backend && go run ./cmd/server --config config/config.yaml
+
+test-backend: ## 运行后端测试
+	@cd backend && go test ./... -race -count=1
+
+lint-backend: ## 运行 golangci-lint
+	@cd backend && golangci-lint run ./...
+
+tidy-backend: ## 整理后端依赖
+	@cd backend && go mod tidy
 
 
