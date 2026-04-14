@@ -2,4 +2,6 @@ allow_all: false
 allow:
 - Bash(cd /Users/lingojack/dev_custom/proj_template/frontend:*)
 - Edit
+- Bash(ls -la:*)
+- Bash(find /Users/lingojack/dev_custom/proj_template:*)
 deny: []
