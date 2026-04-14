@@ -10,7 +10,6 @@ import (
 
 type Controllers struct {
 	Health *controller.HealthController
-	User   *controller.UserController
 }
 
 func Register(e *echo.Echo, cfg *config.Config, ctrl *Controllers) {
@@ -28,11 +27,4 @@ func Register(e *echo.Echo, cfg *config.Config, ctrl *Controllers) {
 	private := e.Group(cfg.API.Prefix)
 	private.Use(mw.CORS(cfg))
 	private.Use(mw.Auth(cfg))
-
-	// User 路由
-	private.GET("/users", ctrl.User.List)
-	private.GET("/users/:id", ctrl.User.GetByID)
-	private.POST("/users", ctrl.User.Create)
-	private.PUT("/users/:id", ctrl.User.Update)
-	private.DELETE("/users/:id", ctrl.User.Delete)
 }
