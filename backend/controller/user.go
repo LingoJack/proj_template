@@ -30,7 +30,7 @@ func (uc *UserController) Create(c echo.Context) error {
 	if err := validator.BindAndValidate(c, &req); err != nil {
 		return response.BadRequest(c, err.Error())
 	}
-	user, err := uc.userSvc.Create(service.CreateUserInput{
+	user, err := uc.userSvc.Create(c.Request().Context(), service.CreateUserInput{
 		Username: req.Username,
 		Email:    req.Email,
 		Password: req.Password,
@@ -46,7 +46,7 @@ func (uc *UserController) GetByID(c echo.Context) error {
 	if err != nil {
 		return response.BadRequest(c, "invalid id")
 	}
-	user, err := uc.userSvc.GetByID(uint(id))
+	user, err := uc.userSvc.GetByID(c.Request().Context(), id)
 	if err != nil {
 		return response.NotFound(c, "user not found")
 	}
@@ -56,7 +56,7 @@ func (uc *UserController) GetByID(c echo.Context) error {
 func (uc *UserController) List(c echo.Context) error {
 	page, _ := strconv.Atoi(c.QueryParam("page"))
 	pageSize, _ := strconv.Atoi(c.QueryParam("page_size"))
-	result, err := uc.userSvc.List(page, pageSize)
+	result, err := uc.userSvc.List(c.Request().Context(), page, pageSize)
 	if err != nil {
 		return response.InternalError(c)
 	}
@@ -79,7 +79,11 @@ func (uc *UserController) Update(c echo.Context) error {
 	if err := validator.BindAndValidate(c, &req); err != nil {
 		return response.BadRequest(c, err.Error())
 	}
-	user, err := uc.userSvc.Update(uint(id), map[string]any{"email": req.Email})
+	updates := map[string]any{}
+	if req.Email != "" {
+		updates["email"] = req.Email
+	}
+	user, err := uc.userSvc.Update(c.Request().Context(), id, updates)
 	if err != nil {
 		return response.NotFound(c, "user not found")
 	}
@@ -91,7 +95,7 @@ func (uc *UserController) Delete(c echo.Context) error {
 	if err != nil {
 		return response.BadRequest(c, "invalid id")
 	}
-	if err := uc.userSvc.Delete(uint(id)); err != nil {
+	if err := uc.userSvc.Delete(c.Request().Context(), id); err != nil {
 		return response.NotFound(c, "user not found")
 	}
 	return c.NoContent(http.StatusNoContent)

@@ -27,7 +27,7 @@ func initEcho(cfgPath string) (*echo.Echo, func(), error) {
 		database.New,
 
 		// DAO layer
-		dao.NewUserDAO,
+		dao.NewTUserDao,
 
 		// Service layer
 		service.NewUserService,

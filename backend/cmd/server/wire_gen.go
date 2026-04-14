@@ -30,8 +30,8 @@ func initEcho(cfgPath string) (*echo.Echo, func(), error) {
 	if err != nil {
 		return nil, nil, err
 	}
-	userDAO := dao.NewUserDAO(db)
-	userService := service.NewUserService(userDAO)
+	tUserDao := dao.NewTUserDao(db)
+	userService := service.NewUserService(tUserDao)
 	userController := controller.NewUserController(userService)
 	controllers := provideControllers(healthController, userController)
 	echoEcho := provideEcho(configConfig, controllers)
