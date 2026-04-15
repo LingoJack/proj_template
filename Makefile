@@ -59,7 +59,7 @@ init-frontend: ## 初始化前端 React+TS+Tailwind (用法: make init-frontend)
 	@echo "前端初始化完成: frontend/"
 
 check-frontend:
-	@cd frontend && npm install -y && (npm run build || exit 1)
+	@cd frontend && npm install -y && npx tsc --noEmit && npm run build
 
 run-frontend: check-frontend
 	@cd frontend && npm run dev
