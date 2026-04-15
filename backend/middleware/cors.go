@@ -10,7 +10,7 @@ import (
 func CORS(cfg *config.Config) echo.MiddlewareFunc {
 	c := cfg.Middleware.CORS
 	if !c.Enabled {
-		return passthrough()
+		return Passthrough()
 	}
 
 	methods := c.AllowedMethods

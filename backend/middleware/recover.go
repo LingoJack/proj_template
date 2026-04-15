@@ -9,7 +9,7 @@ import (
 
 func Recover(cfg *config.Config) echo.MiddlewareFunc {
 	if !cfg.Middleware.Recover.Enabled {
-		return passthrough()
+		return Passthrough()
 	}
 	return echomw.Recover()
 }

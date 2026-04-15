@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/lingojack/proj_template/config"
+	"github.com/lingojack/proj_template/model"
 	"github.com/rs/zerolog"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -39,6 +40,11 @@ func New(cfg *config.Config, log zerolog.Logger) (*gorm.DB, func(), error) {
 	sqlDB.SetConnMaxLifetime(time.Duration(cfg.Database.ConnMaxLifetimeMinutes) * time.Minute)
 
 	log.Info().Str("driver", cfg.Database.Driver).Msg("database connected")
+
+	// 自动迁移模型
+	if err := db.AutoMigrate(&model.Post{}); err != nil {
+		return nil, nil, fmt.Errorf("failed to auto migrate: %w", err)
+	}
 
 	cleanup := func() {
 		if err := sqlDB.Close(); err != nil {

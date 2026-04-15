@@ -20,7 +20,7 @@ type JWTClaims struct {
 // When disabled in config, it passes through all requests.
 func Auth(cfg *config.Config) echo.MiddlewareFunc {
 	if !cfg.Middleware.Auth.Enabled {
-		return passthrough()
+		return Passthrough()
 	}
 	return echojwt.WithConfig(echojwt.Config{
 		SigningKey:  []byte(cfg.Middleware.Auth.JWTSecret),

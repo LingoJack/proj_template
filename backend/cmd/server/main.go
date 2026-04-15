@@ -1,3 +1,8 @@
+// @title proj_template API
+// @version 1.0
+// @description 全栈项目模板 API 文档
+// @host localhost:8080
+// @BasePath /api/v1
 package main
 
 import (

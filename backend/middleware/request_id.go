@@ -9,7 +9,7 @@ import (
 
 func RequestID(cfg *config.Config) echo.MiddlewareFunc {
 	if !cfg.Middleware.RequestID.Enabled {
-		return passthrough()
+		return Passthrough()
 	}
 	return echomw.RequestID()
 }
